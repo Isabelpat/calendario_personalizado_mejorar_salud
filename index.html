@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <title>Agenda de Isa</title>
+</head>
+<body>
+    <div class="conteiner">
+        <div class="encabezado">
+            <div id="fecha"></div>
+            <h1>ORGANIZADOR DE TAREAS</h1>
+            <h2 class="frase-motivacional">"El éxito no se mide por lo que logras, sino por los obstáculos que superas."</h2>
+        </div>
+        <div class="agregar">
+            <input type="text" id="input" placeholder="Escribe una tarea">
+            <i id="botonAgregar" class="bi bi-plus-circle"></i>
+            <select id="categoria">
+                <option value="trabajo">Trabajo</option>
+                <option value="estudio">Estudio</option>
+                <option value="personal">Personal</option>
+                <option value="entrenamiento">Entrenamiento</option>
+            </select>
+            <select id="fase">
+                <option value="menstrual">Fase Menstrual</option>
+                <option value="folicular">Fase Folicular</option>
+                <option value="ovulatoria">Fase Ovulatoria</option>
+                <option value="premenstrual">Fase Premenstrual</option>
+            </select>
+            <input type="date" id="fechaSeleccionada">
+            <input type="file" id="imagenRutina" accept="image/*">
+        </div>
+        <div class="recomendaciones">
+            <h2>Recomendaciones:</h2>
+            <p id="ejercicioRecomendado">Selecciona una fase para ver el ejercicio recomendado.</p>
+            <p id="alimentacionRecomendada">Selecciona una fase para ver la alimentación sugerida.</p>
+        </div>
+        <div class="tareas">
+            <h2>Tareas Pendientes</h2>
+            <ul id="lista"></ul>
+        </div>
+        <button id="establecerRecordatorio">Establecer Recordatorio</button>
+    </div>
+
+    <script>
+        // Obtener elementos del DOM
+        const inputTarea = document.getElementById('input');
+        const botonAgregar = document.getElementById('botonAgregar');
+        const categoriaSelect = document.getElementById('categoria');
+        const faseSelect = document.getElementById('fase');
+        const fechaSeleccionada = document.getElementById('fechaSeleccionada');
+        const imagenRutina = document.getElementById('imagenRutina');
+        const listaTareas = document.getElementById('lista');
+        const ejercicioRecomendado = document.getElementById('ejercicioRecomendado');
+        const alimentacionRecomendada = document.getElementById('alimentacionRecomendada');
+
+        // Función para mostrar recomendaciones según la fase
+        faseSelect.addEventListener('change', function() {
+            const fase = faseSelect.value;
+
+            switch (fase) {
+                case 'menstrual':
+                    ejercicioRecomendado.textContent = 'Ejercicio recomendado: Caminar o ejercicios ligeros de movilidad.';
+                    alimentacionRecomendada.textContent = 'Alimentación sugerida: Incrementa el consumo de grasas saludables (aguacate, frutos secos), hierro (espinacas, lentejas) y té de hierbas.';
+                    break;
+                case 'folicular':
+                    ejercicioRecomendado.textContent = 'Ejercicio recomendado: Saltar cuerda, trote suave, y calistenia ligera.';
+                    alimentacionRecomendada.textContent = 'Alimentación sugerida: Prioriza carbohidratos complejos (avena, arroz integral), proteínas magras y antioxidantes (berries, cítricos).';
+                    break;
+                case 'ovulatoria':
+                    ejercicioRecomendado.textContent = 'Ejercicio recomendado: Calistenia intensa, sesiones más largas de cuerda y trote continuo.';
+                    alimentacionRecomendada.textContent = 'Alimentación sugerida: Consume alimentos ricos en zinc (semillas de calabaza), vitamina B6 (plátanos) y grasas saludables para equilibrar las hormonas.';
+                    break;
+                case 'premenstrual':
+                    ejercicioRecomendado.textContent = 'Ejercicio recomendado: Trote moderado, saltos ligeros de cuerda, ejercicios de respiración y movilidad.';
+                    alimentacionRecomendada.textContent = 'Alimentación sugerida: Evita el exceso de azúcares y sal. Opta por alimentos ricos en magnesio (chocolate oscuro, espinacas) y fibra (vegetales, granos integrales).';
+                    break;
+                default:
+                    ejercicioRecomendado.textContent = 'Selecciona una fase para ver el ejercicio recomendado.';
+                    alimentacionRecomendada.textContent = 'Selecciona una fase para ver la alimentación sugerida.';
+            }
+        });
+
+        // Función para agregar tarea
+        botonAgregar.addEventListener('click', function() {
+            const tarea = inputTarea.value;
+            const categoria = categoriaSelect.value;
+            const fase = faseSelect.value;
+            const fecha = fechaSeleccionada.value;
+            const imagen = imagenRutina.files[0];
+
+            if (!tarea) {
+                alert("Por favor, ingresa una tarea.");
+                return;
+            }
+
+            const tareaElemento = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            const label = document.createElement('label');
+            label.textContent = `${tarea} - ${categoria} - Fase: ${fase} - Fecha: ${fecha}`;
+
+            if (imagen) {
+                const imagenVista = document.createElement('img');
+                imagenVista.src = URL.createObjectURL(imagen);
+                imagenVista.alt = 'Imagen de rutina';
+                imagenVista.style.width = '100px';
+                imagenVista.style.height = '100px';
+                tareaElemento.appendChild(imagenVista);
+            }
+
+            tareaElemento.appendChild(checkbox);
+            tareaElemento.appendChild(label);
+            listaTareas.appendChild(tareaElemento);
+
+            inputTarea.value = '';
+            fechaSeleccionada.value = '';
+            imagenRutina.value = '';
+        });
+    </script>
+</body>
+</html>
